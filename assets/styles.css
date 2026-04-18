@@ -24,8 +24,14 @@ body {
   font: 16px/1.65 "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", sans-serif;
   overflow: hidden;
 }
+body.home-page { overflow: auto; }
 a { color: var(--sea); text-decoration: none; }
 a:hover { text-decoration: underline; }
+.shell {
+  width: min(1240px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 56px;
+}
 .shell-split {
   width: min(1440px, calc(100% - 24px));
   height: 100vh;
@@ -210,6 +216,7 @@ input, select {
   .rank-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
+  .shell { width: min(100% - 20px, 100%); }
   .topbar, .home-hero, .content, .vote-panel, .sidebar-card, .info-panel, .feature-card, .card, .lead-panel {
     padding: 18px;
     border-radius: 22px;
