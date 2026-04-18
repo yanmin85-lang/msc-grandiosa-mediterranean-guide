@@ -11,10 +11,10 @@
     <header class="home-hero">
       <p class="eyebrow">MSC Grandiosa</p>
       <h1>地中海邮轮资料站</h1>
-      <p class="subtitle">把现有的邮轮资料整理成了一个可浏览、可发布的静态网站。</p>
+      <p class="subtitle">围绕 MSC Grandiosa 地中海航线整理出的统一资料站，包含摘要、详细研究、单日页面和投票工具。</p>
       <div class="hero-actions">
-        <a class="primary-btn" href="detailed.html">打开完整手册</a>
-        <a class="secondary-btn" href="report.html">先看摘要</a>
+        <a class="primary-btn" href="intro.html">先看正式介绍</a>
+        <a class="secondary-btn" href="vote.html">直接投票</a>
       </div>
     </header>
 
@@ -24,18 +24,31 @@
         <h2>资料入口</h2>
       </div>
       <div class="card-grid">
+        <a class="card" href="intro.html">
+          <p class="card-kicker">Start Here</p>
+          <h3>正式介绍</h3>
+          <p>先说明这套资料怎么用、适合谁看，以及当前内容边界。</p>
+        </a>
         
+
         <a class="card" href="report.html">
-          <p class="card-kicker">总览</p>
+          <p class="card-kicker">Overview</p>
           <h3>摘要报告</h3>
           <p>快速决策版，适合先看排名和每日重点。</p>
         </a>
         
 
         <a class="card" href="detailed.html">
-          <p class="card-kicker">全量</p>
+          <p class="card-kicker">Research</p>
           <h3>详细手册</h3>
           <p>完整研究版，包含中文项目说明、注意事项和外部资料。</p>
+        </a>
+        
+
+        <a class="card" href="vote.html">
+          <p class="card-kicker">Vote</p>
+          <h3>投票页面</h3>
+          <p>按 Day 2 到 Day 7 给项目排前 3 名，并即时看结果。</p>
         </a>
         
 
@@ -79,19 +92,16 @@
           <h3>Day 7</h3>
           <p>帕尔马 / 马略卡</p>
         </a>
-        
-      </div>
+        </div>
     </section>
 
     <section class="deck">
       <div class="section-head">
-        <p class="eyebrow">Publishing</p>
-        <h2>发布准备</h2>
+        <p class="eyebrow">Use Case</p>
+        <h2>建议这样使用</h2>
       </div>
       <div class="info-panel">
-        <p>站点目录已经整理为纯静态 HTML，可直接上传到 GitHub Pages、Cloudflare Pages 或 Netlify。</p>
-        <p>如果你要手动上传，优先使用整个 <code>site</code> 文件夹或打包后的 <code>site.zip</code>。</p>
-        <p><a href="PUBLISH.md">查看发布说明</a></p>
+        <p>如果是第一次看资料，先打开 <a href="intro.html">正式介绍</a> 和 <a href="report.html">摘要</a>。如果已经进入具体筛选阶段，直接看单日页面或 <a href="vote.html">投票页</a> 会更高效。</p>
       </div>
     </section>
   </div>

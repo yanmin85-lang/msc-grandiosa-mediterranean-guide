@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>投票 | MSC Grandiosa 地中海邮轮资料站</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Mediterranean Cruise Notes</p>
+        <h1>按天投票</h1>
+        <p class="subtitle">每个人输入名字后，可以给 Day 2 到 Day 7 的项目按最想去的顺序选出前 3 名；提交后立即显示当前浏览器内的统计结果。</p>
+      </div>
+      <nav class="pill-nav"><a class="nav-pill" href="index.html">首页</a>
+<a class="nav-pill" href="intro.html">正式介绍</a>
+<a class="nav-pill is-active" href="vote.html">投票</a>
+<a class="nav-pill" href="report.html">摘要</a>
+<a class="nav-pill" href="detailed.html">总手册</a>
+<a class="nav-pill" href="day2.html">Day 2</a>
+<a class="nav-pill" href="day3.html">Day 3</a>
+<a class="nav-pill" href="day4.html">Day 4</a>
+<a class="nav-pill" href="day5.html">Day 5</a>
+<a class="nav-pill" href="day6.html">Day 6</a>
+<a class="nav-pill" href="day7.html">Day 7</a></nav>
+    </header>
+
+    <div class="vote-layout">
+      <section class="vote-panel">
+        <div class="info-panel">
+          <p><strong>当前限制：</strong>这是静态站版本，投票数据保存在当前浏览器中，适合同一设备上做家庭讨论或现场汇总，不会自动同步到其他人的设备。</p>
+        </div>
+
+        <form id="vote-form" class="vote-form">
+          <label class="field">
+            <span>投票人名字</span>
+            <input id="voter-name" name="voter-name" type="text" placeholder="例如：Yanmin" required>
+          </label>
+          <div id="day-groups"></div>
+          <div class="vote-actions">
+            <button type="submit" class="primary-btn">提交投票</button>
+            <button type="button" class="secondary-btn" id="reset-my-vote">清空这个名字的投票</button>
+            <button type="button" class="secondary-btn" id="clear-all-votes">清空当前浏览器全部投票</button>
+          </div>
+        </form>
+      </section>
+
+      <aside class="results-panel">
+        <div class="sidebar-card">
+          <h2>即时结果</h2>
+          <p class="small-note">计分规则：第 1 名 = 3 分，第 2 名 = 2 分，第 3 名 = 1 分。</p>
+          <div id="results"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const voteData = {"day2": [{"dayLabel": "Day 2 | 戛纳 Cannes / Côte d'Azur"}, {"code": "CEQ15", "title": "戛纳老城步行与自由活动"}, {"code": "CEQBK2", "title": "戛纳至昂蒂布海岸电助力骑行"}, {"code": "CEQ01", "title": "尼斯城市观光"}, {"code": "CEQ02", "title": "戛纳与圣拉斐尔法式海岸线"}, {"code": "CEQ04", "title": "摩纳哥经典游"}, {"code": "CEQ09", "title": "戛纳与昂蒂布双城游"}], "day3": [{"dayLabel": "Day 3 | 热那亚 Genua / Portofino"}, {"code": "GOA06T", "title": "热那亚敞篷巴士加水族馆"}, {"code": "GOA14T", "title": "热那亚 Segway 城市探险"}, {"code": "GOA18T", "title": "热那亚城市景观巴士游"}, {"code": "GOA23T", "title": "米兰一日观光"}, {"code": "GOA29T", "title": "波托菲诺与利古里亚海岸"}, {"code": "GOA39T", "title": "热那亚世界级水族馆"}, {"code": "GOA44T", "title": "热那亚历史中心徒步"}, {"code": "GOA46T", "title": "利古里亚海岸村庄加美食加波托菲诺"}, {"code": "GOA51T", "title": "跟着 Nino 探索航海共和国热那亚"}, {"code": "GOABK2", "title": "热那亚电助力骑行"}, {"code": "GOAEA", "title": "热那亚无障碍观光"}, {"code": "FMGOA393", "title": "热那亚水族馆家庭套票 2大1小"}, {"code": "FMGOA394", "title": "热那亚水族馆家庭套票 2大2小"}, {"code": "GOA19T", "title": "热那亚水族馆幕后体验"}], "day4": [{"dayLabel": "Day 4 | 拉斯佩齐亚 La Spezia / Cinque Terre"}, {"code": "SPE21", "title": "卢卡古城与酒庄品酒"}, {"code": "SPE43", "title": "五渔村三村游加午餐"}, {"code": "SPEBK2", "title": "拉斯佩齐亚至莱里奇电助力骑行"}, {"code": "SPEEA", "title": "佛罗伦萨无障碍观光"}, {"code": "SPEEAA", "title": "比萨加卢卡无障碍观光"}, {"code": "SPE05", "title": "比萨斜塔与奇迹广场"}, {"code": "SPE08", "title": "佛罗伦萨一日游"}, {"code": "SPE11", "title": "五渔村自由探索"}, {"code": "SPE61", "title": "五渔村第六村波托韦内雷"}, {"code": "SPE62", "title": "佛罗伦萨加比萨经典日"}], "day5": [{"dayLabel": "Day 5 | 奇维塔韦基亚 Civitavecchia / 罗马"}, {"code": "CIV07", "title": "罗马地标全览含斗兽场"}, {"code": "CIV08", "title": "梵蒂冈博物馆加罗马亮点"}, {"code": "CIV73", "title": "永恒之城罗马精华"}, {"code": "CIV74", "title": "奥斯蒂亚古城与鲁斯波利城堡"}, {"code": "CIV76", "title": "罗马标志性景点一日游"}, {"code": "CIVBK1", "title": "罗马自行车一日游"}, {"code": "CIVBK2", "title": "罗马电助力自行车一日游"}, {"code": "CIVOP", "title": "罗马随上随下观光巴士"}, {"code": "CIV02", "title": "罗马建筑与巴洛克中心"}, {"code": "CIV03", "title": "罗马自由行接送"}, {"code": "CIV09", "title": "罗马巴士亮点与圣彼得广场"}, {"code": "CIV22", "title": "塔尔奎尼亚与图斯卡尼亚双城"}], "day6": [{"dayLabel": "Day 6 | 海上日 At Sea"}, {"code": "BTS01", "title": "终极幕后参观：全区域"}, {"code": "BTS02", "title": "幕后参观：后台与后勤区"}, {"code": "BTS03", "title": "幕后参观：控制室与机舱区"}], "day7": [{"dayLabel": "Day 7 | 帕尔马 Palma de Mallorca"}, {"code": "PMI02", "title": "龙洞地下湖加珍珠工厂"}, {"code": "PMI28", "title": "索列尔古董火车山景线"}, {"code": "PMI44", "title": "帕尔马老城与马略卡美食"}, {"code": "PMI99", "title": "帕尔马步行 Protectours"}, {"code": "PMIBK2", "title": "帕尔马电助力骑行"}, {"code": "PMIEA", "title": "帕尔马无障碍观光"}, {"code": "PMI01", "title": "帕尔马城堡与大教堂"}, {"code": "PMI19", "title": "帕尔马亮点加 Son Amar 弗拉门戈秀"}]};
+    const STORAGE_KEY = "msc-grandiosa-votes-v1";
+
+    function getStoredVotes() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    function setStoredVotes(votes) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(votes));
+    }
+
+    function buildForm() {
+      const container = document.getElementById("day-groups");
+      const fragments = [];
+      Object.entries(voteData).forEach(([dayKey, rows]) => {
+        const meta = rows[0];
+        const options = rows.slice(1);
+        const optionHtml = options.map(item => `<option value="${item.code}">${item.code} | ${item.title}</option>`).join("");
+        fragments.push(`
+          <section class="day-vote-card">
+            <h3>${meta.dayLabel}</h3>
+            <p class="small-note">请按最想去的顺序选出 3 个不同项目。</p>
+            <div class="rank-grid">
+              <label class="field">
+                <span>第 1 名</span>
+                <select name="${dayKey}-1" required>
+                  <option value="">请选择</option>
+                  ${optionHtml}
+                </select>
+              </label>
+              <label class="field">
+                <span>第 2 名</span>
+                <select name="${dayKey}-2" required>
+                  <option value="">请选择</option>
+                  ${optionHtml}
+                </select>
+              </label>
+              <label class="field">
+                <span>第 3 名</span>
+                <select name="${dayKey}-3" required>
+                  <option value="">请选择</option>
+                  ${optionHtml}
+                </select>
+              </label>
+            </div>
+          </section>
+        `);
+      });
+      container.innerHTML = fragments.join("");
+    }
+
+    function renderResults() {
+      const votes = getStoredVotes();
+      const resultsNode = document.getElementById("results");
+      if (!votes.length) {
+        resultsNode.innerHTML = '<p class="small-note">当前浏览器还没有投票记录。</p>';
+        return;
+      }
+
+      const scoreMap = {};
+      Object.entries(voteData).forEach(([dayKey, rows]) => {
+        scoreMap[dayKey] = {
+          label: rows[0].dayLabel,
+          titles: Object.fromEntries(rows.slice(1).map(item => [item.code, item.title])),
+          tallies: {}
+        };
+      });
+
+      votes.forEach(vote => {
+        Object.entries(vote.days).forEach(([dayKey, ranks]) => {
+          [3, 2, 1].forEach((points, idx) => {
+            const code = ranks[idx];
+            if (!code) return;
+            if (!scoreMap[dayKey].tallies[code]) {
+              scoreMap[dayKey].tallies[code] = { points: 0, first: 0, second: 0, third: 0 };
+            }
+            scoreMap[dayKey].tallies[code].points += points;
+            if (idx === 0) scoreMap[dayKey].tallies[code].first += 1;
+            if (idx === 1) scoreMap[dayKey].tallies[code].second += 1;
+            if (idx === 2) scoreMap[dayKey].tallies[code].third += 1;
+          });
+        });
+      });
+
+      const dayHtml = Object.entries(scoreMap).map(([dayKey, entry]) => {
+        const ranked = Object.entries(entry.tallies)
+          .sort((a, b) => b[1].points - a[1].points || b[1].first - a[1].first || a[0].localeCompare(b[0]))
+          .map(([code, stats]) => `
+            <tr>
+              <td>${code}</td>
+              <td>${entry.titles[code] || code}</td>
+              <td>${stats.points}</td>
+              <td>${stats.first}</td>
+              <td>${stats.second}</td>
+              <td>${stats.third}</td>
+            </tr>
+          `).join("");
+        return `
+          <section class="result-day-card">
+            <h3>${entry.label}</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>代码</th><th>项目</th><th>总分</th><th>第 1 名票数</th><th>第 2 名票数</th><th>第 3 名票数</th></tr>
+                </thead>
+                <tbody>
+                  ${ranked || '<tr><td colspan="6">这一日还没有投票。</td></tr>'}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        `;
+      }).join("");
+
+      const voters = votes.map(v => v.name).sort((a, b) => a.localeCompare(b, 'zh-CN'));
+      resultsNode.innerHTML = `
+        <div class="vote-summary">
+          <p><strong>当前投票人数：</strong>${votes.length}</p>
+          <p><strong>已投票名单：</strong>${voters.join('、')}</p>
+        </div>
+        ${dayHtml}
+      `;
+    }
+
+    function validateRanks(dayKey, values) {
+      const filtered = values.filter(Boolean);
+      return filtered.length === 3 && new Set(filtered).size === 3;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      buildForm();
+      renderResults();
+
+      const form = document.getElementById("vote-form");
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+        const name = document.getElementById("voter-name").value.trim();
+        if (!name) {
+          alert("请先输入名字。");
+          return;
+        }
+
+        const days = {};
+        for (const dayKey of Object.keys(voteData)) {
+          const ranks = [1, 2, 3].map(rank => form.elements[`${dayKey}-${rank}`].value);
+          if (!validateRanks(dayKey, ranks)) {
+            alert(`${voteData[dayKey][0].dayLabel} 需要选择 3 个不同项目。`);
+            return;
+          }
+          days[dayKey] = ranks;
+        }
+
+        const votes = getStoredVotes().filter(v => v.name !== name);
+        votes.push({ name, days, submittedAt: new Date().toISOString() });
+        setStoredVotes(votes);
+        renderResults();
+        alert("投票已保存到当前浏览器，并已更新结果。");
+      });
+
+      document.getElementById("reset-my-vote").addEventListener("click", () => {
+        const name = document.getElementById("voter-name").value.trim();
+        if (!name) {
+          alert("请先输入要清除的名字。");
+          return;
+        }
+        const votes = getStoredVotes().filter(v => v.name !== name);
+        setStoredVotes(votes);
+        renderResults();
+        alert("这个名字的投票已清除。");
+      });
+
+      document.getElementById("clear-all-votes").addEventListener("click", () => {
+        if (!confirm("这会清空当前浏览器保存的全部投票，是否继续？")) return;
+        localStorage.removeItem(STORAGE_KEY);
+        renderResults();
+      });
+    });
+  </script>
+</body>
+</html>
