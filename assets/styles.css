@@ -80,6 +80,30 @@ a:hover { text-decoration: underline; }
   line-height: 1.55;
   overflow-wrap: anywhere;
 }
+.sidebar-actions {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(15,92,125,.22);
+  background: rgba(255,255,255,.82);
+  color: var(--sea);
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 10px 24px rgba(15,92,125,.08);
+}
+.home-btn:hover {
+  background: var(--sea);
+  color: white;
+  text-decoration: none;
+}
 .main-stage {
   display: grid;
   gap: 24px;
