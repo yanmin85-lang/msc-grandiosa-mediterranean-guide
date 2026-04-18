@@ -6,9 +6,10 @@
   const mobileQuery = window.matchMedia('(max-width: 760px)');
   let frame = 0;
 
-  const setShift = (x, y) => {
+  const setViewportLock = (x, y, scale) => {
     root.style.setProperty('--mobile-toc-shift-x', `${Math.round(x)}px`);
     root.style.setProperty('--mobile-toc-shift-y', `${Math.round(y)}px`);
+    root.style.setProperty('--mobile-toc-scale', `${scale}`);
   };
 
   const updateAnchor = () => {
@@ -16,7 +17,7 @@
 
     const viewport = window.visualViewport;
     if (!mobileQuery.matches || !viewport) {
-      setShift(0, 0);
+      setViewportLock(0, 0, 1);
       return;
     }
 
@@ -24,8 +25,9 @@
     const layoutHeight = document.documentElement.clientHeight;
     const shiftX = viewport.offsetLeft + viewport.width - layoutWidth;
     const shiftY = viewport.offsetTop + viewport.height - layoutHeight;
+    const scale = viewport.scale && Number.isFinite(viewport.scale) ? 1 / viewport.scale : 1;
 
-    setShift(shiftX, shiftY);
+    setViewportLock(shiftX, shiftY, scale);
   };
 
   const scheduleAnchorUpdate = () => {

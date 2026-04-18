@@ -663,7 +663,10 @@ input, select {
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     cursor: pointer;
-    transform: translate3d(var(--mobile-toc-shift-x, 0px), var(--mobile-toc-shift-y, 0px), 0);
+    transform-origin: bottom right;
+    transform:
+      translate3d(var(--mobile-toc-shift-x, 0px), var(--mobile-toc-shift-y, 0px), 0)
+      scale(var(--mobile-toc-scale, 1));
     will-change: transform;
   }
   .mobile-toc-drawer > summary::-webkit-details-marker { display: none; }
