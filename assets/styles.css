@@ -182,7 +182,6 @@ tbody tr:nth-child(even) td { background: rgba(232,213,181,.12); }
 .primary-btn { background: var(--sea); color: white; }
 .secondary-btn { background: transparent; border-color: rgba(15,92,125,.3); color: var(--sea); }
 .primary-btn:hover, .secondary-btn:hover { text-decoration: none; }
-.intro-content { display: grid; gap: 24px; }
 .step-list li { margin-bottom: 10px; }
 .vote-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr); gap: 24px; align-items: start; }
 .results-panel { position: sticky; top: 0; }
