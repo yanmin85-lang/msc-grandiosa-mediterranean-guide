@@ -105,6 +105,10 @@ a:hover { text-decoration: underline; }
   color: white;
   text-decoration: none;
 }
+.ghost-btn {
+  background: transparent;
+  box-shadow: none;
+}
 .main-stage {
   display: grid;
   gap: 24px;
@@ -186,6 +190,36 @@ tbody tr:nth-child(even) td { background: rgba(232,213,181,.12); }
 .step-list li { margin-bottom: 10px; }
 .vote-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr); gap: 24px; align-items: start; }
 .results-panel { position: sticky; top: 0; }
+.search-content { display: grid; gap: 20px; }
+.search-panel {
+  border: 1px solid rgba(217,203,183,.82);
+  background: rgba(255,255,255,.84);
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+.search-field input {
+  font-size: 18px;
+  padding: 14px 16px;
+}
+.search-results {
+  display: grid;
+  gap: 16px;
+}
+.search-result-card {
+  border: 1px solid rgba(217,203,183,.82);
+  background: rgba(255,255,255,.84);
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+.search-result-card h3 {
+  margin: 0 0 10px;
+  font-size: 24px;
+}
+.search-result-card .card-kicker {
+  margin-bottom: 8px;
+}
 .vote-form { display: grid; gap: 18px; }
 .field { display: grid; gap: 8px; }
 .field span { font-weight: 600; color: var(--ink); }

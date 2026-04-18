@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>站内搜索</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div class="shell shell-split">
+    <aside class="nav-rail">
+      <section class="topbar">
+        <p class="eyebrow">Mediterranean Cruise Notes</p>
+        <h1>站内搜索</h1>
+        <p class="subtitle">搜索项目代码、目的地、中文标题和正文内容，快速跳到对应页面。</p>
+        <div class="sidebar-actions">
+          <a class="home-btn" href="index.html">回到首页</a>
+          <a class="home-btn ghost-btn" href="search.html">站内搜索</a>
+        </div>
+      </section>
+      
+      <section class="sidebar-card">
+        <h2>页内导航</h2>
+        <div class="toc">
+          <a class="toc-level-2" href="#search-guide">搜索说明</a>
+          <a class="toc-level-2" href="#search-panel">搜索框</a>
+          <a class="toc-level-2" href="#search-results">搜索结果</a>
+        </div>
+      </section>
+    
+    </aside>
+    <main class="main-stage">
+      
+    <section class="content search-content">
+      <div class="info-panel" id="search-guide">
+        <p><strong>可搜索范围：</strong>摘要、总手册、Day 2 到 Day 7 单页，以及这些页面里的项目代码、中文标题和正文内容。</p>
+        <p class="small-note">你可以直接搜项目代码，例如 `GOA39T`、`PMI02`，也可以搜中文关键词，例如“水族馆”“罗马”“亲子”。</p>
+      </div>
+
+      <section class="search-panel" id="search-panel">
+        <label class="field search-field">
+          <span>站内搜索</span>
+          <input id="site-search-input" type="search" placeholder="输入项目代码、目的地或关键词">
+        </label>
+        <p class="small-note" id="search-status">输入关键词后会立即显示匹配结果。</p>
+      </section>
+
+      <section id="search-results" class="search-results"></section>
+    </section>
+    
+    </main>
+  </div>
+  
+  <script>
+    const SEARCH_INDEX_URL = 'assets/search-index.json';
+
+    function normalize(text) {
+      return (text || '').toLowerCase().replace(/\s+/g, ' ').trim();
+    }
+
+    function buildSnippet(text, query) {
+      const clean = (text || '').replace(/\s+/g, ' ').trim();
+      if (!clean) return '';
+      if (!query) return clean.slice(0, 160) + (clean.length > 160 ? '…' : '');
+      const idx = clean.toLowerCase().indexOf(query.toLowerCase());
+      if (idx === -1) return clean.slice(0, 160) + (clean.length > 160 ? '…' : '');
+      const start = Math.max(0, idx - 50);
+      const end = Math.min(clean.length, idx + 110);
+      const prefix = start > 0 ? '…' : '';
+      const suffix = end < clean.length ? '…' : '';
+      return prefix + clean.slice(start, end) + suffix;
+    }
+
+    function scoreEntry(entry, query) {
+      if (!query) return 0;
+      let score = 0;
+      const q = query.toLowerCase();
+      if ((entry.title || '').toLowerCase().includes(q)) score += 8;
+      if ((entry.keywords || '').toLowerCase().includes(q)) score += 6;
+      if ((entry.body || '').toLowerCase().includes(q)) score += 3;
+      return score;
+    }
+
+    async function initSearch() {
+      const input = document.getElementById('site-search-input');
+      const results = document.getElementById('search-results');
+      const status = document.getElementById('search-status');
+      const params = new URLSearchParams(window.location.search);
+      const initialQuery = params.get('q') || '';
+      input.value = initialQuery;
+
+      let entries = [];
+      try {
+        const response = await fetch(SEARCH_INDEX_URL);
+        entries = await response.json();
+      } catch (error) {
+        status.textContent = '搜索索引加载失败，请稍后刷新重试。';
+        return;
+      }
+
+      function render(query) {
+        const normalized = normalize(query);
+        const filtered = !normalized
+          ? []
+          : entries
+              .map(entry => ({ entry, score: scoreEntry(entry, normalized) }))
+              .filter(item => item.score > 0)
+              .sort((a, b) => b.score - a.score || a.entry.title.localeCompare(b.entry.title, 'zh-CN'))
+              .slice(0, 40);
+
+        if (!normalized) {
+          status.textContent = '输入关键词后会立即显示匹配结果。';
+          results.innerHTML = '';
+          return;
+        }
+
+        status.textContent = `共找到 ${filtered.length} 条匹配结果。`;
+        if (!filtered.length) {
+          results.innerHTML = '<div class="info-panel"><p>没有找到匹配结果，可以换一个关键词，或者直接搜索项目代码。</p></div>';
+          return;
+        }
+
+        results.innerHTML = filtered.map(({ entry }) => `
+          <article class="search-result-card">
+            <p class="card-kicker">${entry.section}</p>
+            <h3><a href="${entry.href}">${entry.title}</a></h3>
+            <p class="small-note">${buildSnippet(entry.body, normalized)}</p>
+          </article>
+        `).join('');
+      }
+
+      input.addEventListener('input', event => {
+        const value = event.target.value;
+        const url = new URL(window.location.href);
+        if (value.trim()) {
+          url.searchParams.set('q', value.trim());
+        } else {
+          url.searchParams.delete('q');
+        }
+        history.replaceState(null, '', url.toString());
+        render(value);
+      });
+
+      render(initialQuery);
+    }
+
+    document.addEventListener('DOMContentLoaded', initSearch);
+  </script>
+
+</body>
+</html>
