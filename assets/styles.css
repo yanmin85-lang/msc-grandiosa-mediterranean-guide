@@ -190,6 +190,35 @@ h1 { margin: 0; font-size: clamp(34px, 4vw, 58px); }
 .content [id] { scroll-margin-top: 24px; }
 .hero-image { margin: 10px 0 20px; border-radius: 22px; overflow: hidden; }
 .hero-image img { display: block; width: 100%; height: auto; }
+.port-window {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 20px;
+  padding: 16px 18px;
+  border: 1px solid rgba(15,92,125,.14);
+  border-radius: 20px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.96), rgba(244,250,252,.98)),
+    linear-gradient(135deg, rgba(15,92,125,.06), rgba(109,167,200,.08));
+  box-shadow: 0 14px 30px rgba(19,38,58,.08);
+}
+.port-window-label {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+}
+.port-window strong {
+  color: var(--sea);
+  font-size: clamp(20px, 2vw, 24px);
+  line-height: 1.2;
+}
+.port-window-note {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.port-window.is-sea-day strong { color: var(--sun); }
 p { margin: 0 0 14px; }
 ul, ol { margin: 0 0 18px 22px; padding: 0; }
 li { margin: 6px 0; }
@@ -445,6 +474,17 @@ input, select {
     width: 100%;
     aspect-ratio: 16 / 10;
     object-fit: cover;
+  }
+  .port-window {
+    margin-bottom: 22px;
+    padding: 15px 16px;
+    border-radius: 22px;
+  }
+  .port-window strong {
+    font-size: 21px;
+  }
+  .port-window-note {
+    font-size: 13px;
   }
   .table-wrap {
     margin: 0 -4px 22px;
