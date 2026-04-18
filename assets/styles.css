@@ -277,7 +277,7 @@ tbody tr:nth-child(even) td { background: rgba(232,213,181,.12); }
 .primary-btn:hover, .secondary-btn:hover { text-decoration: none; }
 .step-list li { margin-bottom: 10px; }
 .vote-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr); gap: 24px; align-items: start; }
-.results-panel { position: sticky; top: 0; }
+.results-panel { position: sticky; top: 0; display: grid; gap: 18px; }
 .search-content { display: grid; gap: 20px; }
 .search-panel {
   border: 1px solid rgba(217,203,183,.82);
@@ -330,8 +330,62 @@ input, select {
 .day-vote-card h3, .result-day-card h3 { margin-top: 0; }
 .rank-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .vote-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+.vote-log-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 16px; }
 .small-note { color: var(--muted); font-size: 14px; }
 .vote-summary { padding: 0 0 8px; }
+.primary-btn:disabled,
+.secondary-btn:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+.vote-log-list { display: grid; gap: 12px; }
+.vote-log-card {
+  border: 1px solid rgba(217,203,183,.8);
+  background: rgba(255,255,255,.82);
+  border-radius: 20px;
+  padding: 16px 18px;
+}
+.vote-log-card summary,
+.vote-log-summary {
+  display: grid;
+  gap: 4px;
+}
+.vote-log-card summary {
+  cursor: pointer;
+  list-style: none;
+}
+.vote-log-card summary::-webkit-details-marker { display: none; }
+.vote-log-card[open] {
+  background: rgba(255,255,255,.9);
+  box-shadow: 0 14px 28px rgba(19,38,58,.08);
+}
+.vote-log-summary-name {
+  font-weight: 700;
+  color: var(--ink);
+}
+.vote-log-summary-meta {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.vote-log-body {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+}
+.vote-log-day + .vote-log-day {
+  padding-top: 14px;
+  border-top: 1px solid rgba(217,203,183,.72);
+}
+.vote-log-day p {
+  margin: 0 0 8px;
+}
+.vote-log-ranks {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
 .home-page .home-hero { padding: 56px 40px; }
 .home-page .deck {
   display: block;
@@ -667,6 +721,12 @@ input, select {
   .vote-actions {
     gap: 10px;
     margin-top: 12px;
+  }
+  .vote-log-actions {
+    display: grid;
+  }
+  .vote-log-actions > * {
+    width: 100%;
   }
   .primary-btn,
   .secondary-btn {
