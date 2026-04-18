@@ -357,15 +357,15 @@ input, select {
 @media (max-width: 760px) {
   body { overflow: auto; }
   .shell-split {
-    width: min(100% - 16px, 100%);
+    width: min(100% - 14px, 100%);
     height: auto;
     grid-template-columns: 1fr;
-    gap: 14px;
-    padding: calc(12px + env(safe-area-inset-top, 0px)) 0 calc(104px + env(safe-area-inset-bottom, 0px));
+    gap: 16px;
+    padding: calc(10px + env(safe-area-inset-top, 0px)) 0 calc(110px + env(safe-area-inset-bottom, 0px));
   }
   .nav-rail {
     position: sticky;
-    top: calc(10px + env(safe-area-inset-top, 0px));
+    top: calc(8px + env(safe-area-inset-top, 0px));
     z-index: 30;
     overflow: visible;
     padding-right: 0;
@@ -376,8 +376,8 @@ input, select {
     display: none;
   }
   .nav-rail .site-nav-card {
-    padding: 10px;
-    border-radius: 22px;
+    padding: 12px;
+    border-radius: 24px;
     border-color: rgba(217,203,183,.9);
     background:
       linear-gradient(135deg, rgba(255,255,255,.88), rgba(255,250,244,.96)),
@@ -393,21 +393,24 @@ input, select {
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: max-content;
-    gap: 10px;
+    gap: 11px;
     overflow-x: auto;
     overscroll-behavior-x: contain;
-    padding: 1px 0 3px;
+    padding: 2px 1px 4px;
+    scroll-snap-type: x proximity;
     scrollbar-width: none;
   }
   .nav-rail .site-nav-list::-webkit-scrollbar {
     display: none;
   }
   .nav-rail .nav-pill {
-    min-height: 40px;
-    padding: 10px 14px;
+    min-height: 44px;
+    padding: 11px 16px;
     border-radius: 999px;
     white-space: nowrap;
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    scroll-snap-align: start;
     box-shadow: none;
     background: rgba(255,255,255,.88);
     border-color: rgba(15,92,125,.12);
@@ -422,14 +425,14 @@ input, select {
     overflow: visible;
     padding-right: 0;
     padding-top: 0;
-    gap: 16px;
+    gap: 18px;
   }
   .mobile-page-header {
     display: block;
     position: relative;
     overflow: hidden;
-    padding: 22px 18px 18px;
-    border-radius: 28px;
+    padding: 24px 20px 20px;
+    border-radius: 30px;
   }
   .mobile-page-header::before {
     content: "";
@@ -442,24 +445,25 @@ input, select {
     pointer-events: none;
   }
   .mobile-page-header h1 {
-    font-size: clamp(28px, 9vw, 38px);
-    max-width: 12ch;
+    font-size: clamp(30px, 8.8vw, 40px);
+    max-width: 11ch;
   }
   .mobile-page-header .subtitle {
     margin-top: 12px;
     line-height: 1.55;
+    font-size: 15px;
   }
   .content > h1:first-child {
     display: none;
   }
   .content {
-    padding: 20px 18px 24px;
-    border-radius: 28px;
+    padding: 22px 18px 26px;
+    border-radius: 30px;
   }
   .content [id],
   .vote-panel [id],
   .results-panel [id] {
-    scroll-margin-top: 92px;
+    scroll-margin-top: 104px;
   }
   .content p,
   .content li {
@@ -565,7 +569,7 @@ input, select {
   }
   .search-panel {
     position: sticky;
-    top: calc(82px + env(safe-area-inset-top, 0px));
+    top: calc(94px + env(safe-area-inset-top, 0px));
     z-index: 15;
     padding: 16px;
     border-radius: 22px;
@@ -634,8 +638,8 @@ input, select {
   .mobile-toc-drawer {
     display: block;
     position: fixed;
-    right: 12px;
-    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    right: 14px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     z-index: 40;
   }
   .mobile-toc-drawer > summary {
@@ -643,14 +647,16 @@ input, select {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 52px;
-    padding: 0 18px;
+    min-height: 56px;
+    min-width: 88px;
+    padding: 0 20px;
     border-radius: 999px;
     background:
       linear-gradient(135deg, rgba(255,255,255,.9), rgba(255,249,242,.98)),
       linear-gradient(135deg, rgba(15,92,125,.12), rgba(201,107,67,.12));
     color: var(--ink);
     font-weight: 800;
+    font-size: 15px;
     letter-spacing: .04em;
     border: 1px solid rgba(15,92,125,.14);
     box-shadow: 0 18px 34px rgba(19,38,58,.18);
@@ -661,13 +667,13 @@ input, select {
   .mobile-toc-drawer > summary::-webkit-details-marker { display: none; }
   .mobile-toc-sheet {
     position: fixed;
-    left: 12px;
-    right: 12px;
-    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    left: 14px;
+    right: 14px;
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
     top: auto;
-    max-height: min(68vh, 620px);
+    max-height: min(70vh, 640px);
     overflow: auto;
-    padding: 18px;
+    padding: 20px;
     border-radius: 28px;
     border: 1px solid rgba(217,203,183,.9);
     background:
@@ -682,7 +688,7 @@ input, select {
     margin-top: 0;
   }
   .mobile-toc-head h2 {
-    font-size: 24px;
+    font-size: 26px;
     margin-bottom: 8px;
   }
   .mobile-toc-section + .mobile-toc-section {
@@ -695,8 +701,8 @@ input, select {
   }
   .mobile-toc-section .toc a {
     display: block;
-    padding: 12px 14px;
-    border-radius: 16px;
+    padding: 13px 15px;
+    border-radius: 18px;
     background: rgba(19,38,58,.05);
   }
   .mobile-toc-section:last-child {
@@ -725,4 +731,59 @@ input, select {
   .home-page .card { min-height: 0; padding: 20px; }
   h1 { font-size: 34px; }
   h2 { font-size: 28px; }
+}
+@media (max-width: 430px) and (min-width: 390px) and (min-height: 820px) {
+  .shell-split {
+    padding-bottom: calc(122px + env(safe-area-inset-bottom, 0px));
+  }
+  .nav-rail .site-nav-card {
+    padding: 13px;
+    border-radius: 26px;
+  }
+  .nav-rail .site-nav-list {
+    gap: 12px;
+  }
+  .nav-rail .nav-pill {
+    min-height: 48px;
+    padding: 12px 18px;
+    font-size: 15px;
+  }
+  .mobile-page-header {
+    padding: 25px 20px 21px;
+  }
+  .content,
+  .vote-panel,
+  .results-panel .sidebar-card,
+  .search-panel,
+  .search-result-card {
+    border-radius: 26px;
+  }
+  .content,
+  .vote-panel,
+  .results-panel .sidebar-card {
+    padding: 22px 19px 28px;
+  }
+  .content [id],
+  .vote-panel [id],
+  .results-panel [id] {
+    scroll-margin-top: 116px;
+  }
+  .search-panel,
+  .search-result-card {
+    padding: 20px;
+  }
+  .search-panel {
+    top: calc(102px + env(safe-area-inset-top, 0px));
+  }
+  .mobile-toc-drawer > summary {
+    min-height: 60px;
+    min-width: 96px;
+    padding: 0 24px;
+    font-size: 16px;
+  }
+  .mobile-toc-sheet {
+    bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+    max-height: min(72vh, 680px);
+    padding: 20px 20px 24px;
+  }
 }
