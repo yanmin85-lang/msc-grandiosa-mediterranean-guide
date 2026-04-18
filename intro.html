@@ -3,18 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>正式介绍 | MSC Grandiosa 地中海邮轮资料站</title>
+  <title>正式介绍</title>
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-  <div class="shell">
-    <header class="topbar">
-      <div>
+  <div class="shell shell-split">
+    <aside class="nav-rail">
+      <section class="topbar">
         <p class="eyebrow">Mediterranean Cruise Notes</p>
         <h1>正式介绍</h1>
         <p class="subtitle">给家里人或同行者看的正式入口页，先说明网站内容、用法和当前边界。</p>
-      </div>
-      <nav class="pill-nav"><a class="nav-pill" href="index.html">首页</a>
+      </section>
+      <section class="sidebar-card site-nav-card">
+        <h2>站点导航</h2>
+        <nav class="pill-nav pill-nav-vertical"><a class="nav-pill" href="index.html">首页</a>
 <a class="nav-pill is-active" href="intro.html">正式介绍</a>
 <a class="nav-pill" href="vote.html">投票</a>
 <a class="nav-pill" href="report.html">摘要</a>
@@ -25,8 +27,20 @@
 <a class="nav-pill" href="day5.html">Day 5</a>
 <a class="nav-pill" href="day6.html">Day 6</a>
 <a class="nav-pill" href="day7.html">Day 7</a></nav>
-    </header>
-    <main class="intro-content">
+      </section>
+      
+      <section class="sidebar-card">
+        <h2>建议顺序</h2>
+        <div class="toc">
+          <a class="toc-level-2" href="report.html">先看摘要</a>
+          <a class="toc-level-2" href="detailed.html">再看总手册</a>
+          <a class="toc-level-2" href="vote.html">最后进入投票</a>
+        </div>
+      </section>
+    
+    </aside>
+    <main class="main-stage">
+      <div class="intro-content">
     <section class="lead-panel">
       <p class="eyebrow">Official Overview</p>
       <h2>MSC Grandiosa 地中海航线资料总入口</h2>
@@ -80,7 +94,9 @@
         <p>投票功能当前是静态站方案，结果保存在当前浏览器里，适合家庭内部讨论或在同一设备上统一汇总。如果后面要做“多人异地实时共享投票”，那就需要增加后端服务。</p>
       </div>
     </section>
+    </div>
     </main>
   </div>
+  
 </body>
 </html>

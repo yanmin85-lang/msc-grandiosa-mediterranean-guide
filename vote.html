@@ -3,18 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>投票 | MSC Grandiosa 地中海邮轮资料站</title>
+  <title>按天投票</title>
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-  <div class="shell">
-    <header class="topbar">
-      <div>
+  <div class="shell shell-split">
+    <aside class="nav-rail">
+      <section class="topbar">
         <p class="eyebrow">Mediterranean Cruise Notes</p>
         <h1>按天投票</h1>
         <p class="subtitle">每个人输入名字后，可以给 Day 2 到 Day 7 的项目按最想去的顺序选出前 3 名；提交后立即显示当前浏览器内的统计结果。</p>
-      </div>
-      <nav class="pill-nav"><a class="nav-pill" href="index.html">首页</a>
+      </section>
+      <section class="sidebar-card site-nav-card">
+        <h2>站点导航</h2>
+        <nav class="pill-nav pill-nav-vertical"><a class="nav-pill" href="index.html">首页</a>
 <a class="nav-pill" href="intro.html">正式介绍</a>
 <a class="nav-pill is-active" href="vote.html">投票</a>
 <a class="nav-pill" href="report.html">摘要</a>
@@ -25,8 +27,20 @@
 <a class="nav-pill" href="day5.html">Day 5</a>
 <a class="nav-pill" href="day6.html">Day 6</a>
 <a class="nav-pill" href="day7.html">Day 7</a></nav>
-    </header>
-
+      </section>
+      
+      <section class="sidebar-card">
+        <h2>投票规则</h2>
+        <div class="toc">
+          <p class="small-note">每人输入名字后，需要给 Day 2 到 Day 7 每天都排出前 3 名。</p>
+          <p class="small-note">同一名字再次提交时，会覆盖之前在当前浏览器里的投票。</p>
+          <p class="small-note">计分规则为第 1 名 3 分、第 2 名 2 分、第 3 名 1 分。</p>
+        </div>
+      </section>
+    
+    </aside>
+    <main class="main-stage">
+      
     <div class="vote-layout">
       <section class="vote-panel">
         <div class="info-panel">
@@ -55,8 +69,10 @@
         </div>
       </aside>
     </div>
+    
+    </main>
   </div>
-
+  
   <script>
     const voteData = {"day2": [{"dayLabel": "Day 2 | 戛纳 Cannes / Côte d'Azur"}, {"code": "CEQ15", "title": "戛纳老城步行与自由活动"}, {"code": "CEQBK2", "title": "戛纳至昂蒂布海岸电助力骑行"}, {"code": "CEQ01", "title": "尼斯城市观光"}, {"code": "CEQ02", "title": "戛纳与圣拉斐尔法式海岸线"}, {"code": "CEQ04", "title": "摩纳哥经典游"}, {"code": "CEQ09", "title": "戛纳与昂蒂布双城游"}], "day3": [{"dayLabel": "Day 3 | 热那亚 Genua / Portofino"}, {"code": "GOA06T", "title": "热那亚敞篷巴士加水族馆"}, {"code": "GOA14T", "title": "热那亚 Segway 城市探险"}, {"code": "GOA18T", "title": "热那亚城市景观巴士游"}, {"code": "GOA23T", "title": "米兰一日观光"}, {"code": "GOA29T", "title": "波托菲诺与利古里亚海岸"}, {"code": "GOA39T", "title": "热那亚世界级水族馆"}, {"code": "GOA44T", "title": "热那亚历史中心徒步"}, {"code": "GOA46T", "title": "利古里亚海岸村庄加美食加波托菲诺"}, {"code": "GOA51T", "title": "跟着 Nino 探索航海共和国热那亚"}, {"code": "GOABK2", "title": "热那亚电助力骑行"}, {"code": "GOAEA", "title": "热那亚无障碍观光"}, {"code": "FMGOA393", "title": "热那亚水族馆家庭套票 2大1小"}, {"code": "FMGOA394", "title": "热那亚水族馆家庭套票 2大2小"}, {"code": "GOA19T", "title": "热那亚水族馆幕后体验"}], "day4": [{"dayLabel": "Day 4 | 拉斯佩齐亚 La Spezia / Cinque Terre"}, {"code": "SPE21", "title": "卢卡古城与酒庄品酒"}, {"code": "SPE43", "title": "五渔村三村游加午餐"}, {"code": "SPEBK2", "title": "拉斯佩齐亚至莱里奇电助力骑行"}, {"code": "SPEEA", "title": "佛罗伦萨无障碍观光"}, {"code": "SPEEAA", "title": "比萨加卢卡无障碍观光"}, {"code": "SPE05", "title": "比萨斜塔与奇迹广场"}, {"code": "SPE08", "title": "佛罗伦萨一日游"}, {"code": "SPE11", "title": "五渔村自由探索"}, {"code": "SPE61", "title": "五渔村第六村波托韦内雷"}, {"code": "SPE62", "title": "佛罗伦萨加比萨经典日"}], "day5": [{"dayLabel": "Day 5 | 奇维塔韦基亚 Civitavecchia / 罗马"}, {"code": "CIV07", "title": "罗马地标全览含斗兽场"}, {"code": "CIV08", "title": "梵蒂冈博物馆加罗马亮点"}, {"code": "CIV73", "title": "永恒之城罗马精华"}, {"code": "CIV74", "title": "奥斯蒂亚古城与鲁斯波利城堡"}, {"code": "CIV76", "title": "罗马标志性景点一日游"}, {"code": "CIVBK1", "title": "罗马自行车一日游"}, {"code": "CIVBK2", "title": "罗马电助力自行车一日游"}, {"code": "CIVOP", "title": "罗马随上随下观光巴士"}, {"code": "CIV02", "title": "罗马建筑与巴洛克中心"}, {"code": "CIV03", "title": "罗马自由行接送"}, {"code": "CIV09", "title": "罗马巴士亮点与圣彼得广场"}, {"code": "CIV22", "title": "塔尔奎尼亚与图斯卡尼亚双城"}], "day6": [{"dayLabel": "Day 6 | 海上日 At Sea"}, {"code": "BTS01", "title": "终极幕后参观：全区域"}, {"code": "BTS02", "title": "幕后参观：后台与后勤区"}, {"code": "BTS03", "title": "幕后参观：控制室与机舱区"}], "day7": [{"dayLabel": "Day 7 | 帕尔马 Palma de Mallorca"}, {"code": "PMI02", "title": "龙洞地下湖加珍珠工厂"}, {"code": "PMI28", "title": "索列尔古董火车山景线"}, {"code": "PMI44", "title": "帕尔马老城与马略卡美食"}, {"code": "PMI99", "title": "帕尔马步行 Protectours"}, {"code": "PMIBK2", "title": "帕尔马电助力骑行"}, {"code": "PMIEA", "title": "帕尔马无障碍观光"}, {"code": "PMI01", "title": "帕尔马城堡与大教堂"}, {"code": "PMI19", "title": "帕尔马亮点加 Son Amar 弗拉门戈秀"}]};
     const STORAGE_KEY = "msc-grandiosa-votes-v1";
@@ -186,7 +202,7 @@
       `;
     }
 
-    function validateRanks(dayKey, values) {
+    function validateRanks(values) {
       const filtered = values.filter(Boolean);
       return filtered.length === 3 && new Set(filtered).size === 3;
     }
@@ -207,7 +223,7 @@
         const days = {};
         for (const dayKey of Object.keys(voteData)) {
           const ranks = [1, 2, 3].map(rank => form.elements[`${dayKey}-${rank}`].value);
-          if (!validateRanks(dayKey, ranks)) {
+          if (!validateRanks(ranks)) {
             alert(`${voteData[dayKey][0].dayLabel} 需要选择 3 个不同项目。`);
             return;
           }
@@ -240,5 +256,6 @@
       });
     });
   </script>
+
 </body>
 </html>
