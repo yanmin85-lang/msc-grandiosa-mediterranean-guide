@@ -38,7 +38,7 @@ a:hover { text-decoration: underline; }
   margin: 0 auto;
   padding: 16px 0;
   display: grid;
-  grid-template-columns: 320px minmax(0, 1fr);
+  grid-template-columns: minmax(280px, clamp(320px, 28vw, 420px)) minmax(0, 1fr);
   gap: 20px;
 }
 .topbar, .home-hero, .lead-panel, .content, .vote-panel, .results-panel .sidebar-card, .info-panel, .feature-card, .card {
@@ -64,6 +64,21 @@ a:hover { text-decoration: underline; }
   display: grid;
   gap: 18px;
   align-content: start;
+}
+.nav-rail .topbar {
+  padding: 22px;
+}
+.nav-rail .topbar h1 {
+  font-size: clamp(28px, 2.5vw, 42px);
+  line-height: 1.12;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.nav-rail .topbar .subtitle {
+  max-width: none;
+  font-size: 15px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
 }
 .main-stage {
   display: grid;
