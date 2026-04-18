@@ -382,6 +382,8 @@ input, select {
     display: block;
     position: fixed;
     inset: 0;
+    --mobile-overlay-inline-gap: 14px;
+    --mobile-overlay-panel-width: calc(100% - (var(--mobile-overlay-inline-gap) * 2));
     z-index: 50;
     pointer-events: none;
     transform-origin: top left;
@@ -398,10 +400,12 @@ input, select {
   .site-nav-card.is-overlay-layer {
     position: absolute;
     top: calc(8px + env(safe-area-inset-top, 0px));
-    left: 14px;
-    right: 14px;
+    left: var(--mobile-overlay-inline-gap);
+    width: var(--mobile-overlay-panel-width);
+    right: auto;
     margin: 0;
     padding: 12px;
+    box-sizing: border-box;
     border-radius: 24px;
     border-color: rgba(217,203,183,.9);
     background:
@@ -677,7 +681,7 @@ input, select {
   }
   .mobile-toc-drawer.is-overlay-layer > summary {
     position: absolute;
-    right: 14px;
+    right: var(--mobile-overlay-inline-gap);
     bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     list-style: none;
     display: inline-flex;
@@ -703,15 +707,16 @@ input, select {
   .mobile-toc-drawer.is-overlay-layer > summary::-webkit-details-marker { display: none; }
   .mobile-toc-sheet.is-overlay-layer {
     position: absolute;
-    left: 14px;
-    right: 14px;
+    left: var(--mobile-overlay-inline-gap);
+    width: var(--mobile-overlay-panel-width);
+    right: auto;
     bottom: calc(84px + env(safe-area-inset-bottom, 0px));
     top: auto;
-    width: auto;
     max-width: none;
     max-height: min(70vh, 640px);
     overflow: auto;
     padding: 20px;
+    box-sizing: border-box;
     border-radius: 28px;
     border: 1px solid rgba(217,203,183,.9);
     background:
@@ -720,6 +725,8 @@ input, select {
     box-shadow: 0 24px 60px rgba(19,38,58,.18);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
+    pointer-events: auto;
+    touch-action: pan-y;
   }
   .mobile-toc-head h2,
   .mobile-toc-section h3 {

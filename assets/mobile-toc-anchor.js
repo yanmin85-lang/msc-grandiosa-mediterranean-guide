@@ -33,6 +33,15 @@
     mount.parent.appendChild(node);
   };
 
+  const eventHitsDrawerLayer = (event) => {
+    if (typeof event.composedPath === 'function') {
+      const path = event.composedPath();
+      return path.includes(drawerRoot) || path.includes(drawerSheet);
+    }
+
+    return drawerRoot.contains(event.target) || drawerSheet.contains(event.target);
+  };
+
   const mountOverlayLayer = () => {
     if (overlayRoot.parentNode !== document.body) {
       document.body.appendChild(overlayRoot);
@@ -194,10 +203,20 @@
     setDrawerOpen(!drawerOpen);
   });
 
+  const trapDrawerInteraction = (event) => {
+    if (!mobileQuery.matches) return;
+    event.stopPropagation();
+  };
+
+  drawer.addEventListener('pointerdown', trapDrawerInteraction);
+  drawer.addEventListener('touchstart', trapDrawerInteraction, { passive: true });
+  drawerSheet.addEventListener('pointerdown', trapDrawerInteraction);
+  drawerSheet.addEventListener('touchstart', trapDrawerInteraction, { passive: true });
+  drawerSheet.addEventListener('click', trapDrawerInteraction);
+
   document.addEventListener('pointerdown', (event) => {
     if (!drawerOpen) return;
-    if (drawerRoot.contains(event.target)) return;
-    if (drawerSheet.contains(event.target)) return;
+    if (eventHitsDrawerLayer(event)) return;
     setDrawerOpen(false);
   });
 
