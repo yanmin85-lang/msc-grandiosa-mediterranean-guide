@@ -14,27 +14,13 @@
         <h1>按天投票</h1>
         <p class="subtitle">每个人输入名字后，可以给 Day 2 到 Day 7 的项目按最想去的顺序选出前 3 名；提交后立即显示当前浏览器内的统计结果。</p>
       </section>
-      <section class="sidebar-card site-nav-card">
-        <h2>站点导航</h2>
-        <nav class="pill-nav pill-nav-vertical"><a class="nav-pill" href="index.html">首页</a>
-<a class="nav-pill" href="intro.html">正式介绍</a>
-<a class="nav-pill is-active" href="vote.html">投票</a>
-<a class="nav-pill" href="report.html">摘要</a>
-<a class="nav-pill" href="detailed.html">总手册</a>
-<a class="nav-pill" href="day2.html">Day 2</a>
-<a class="nav-pill" href="day3.html">Day 3</a>
-<a class="nav-pill" href="day4.html">Day 4</a>
-<a class="nav-pill" href="day5.html">Day 5</a>
-<a class="nav-pill" href="day6.html">Day 6</a>
-<a class="nav-pill" href="day7.html">Day 7</a></nav>
-      </section>
       
       <section class="sidebar-card">
-        <h2>投票规则</h2>
+        <h2>页内导航</h2>
         <div class="toc">
-          <p class="small-note">每人输入名字后，需要给 Day 2 到 Day 7 每天都排出前 3 名。</p>
-          <p class="small-note">同一名字再次提交时，会覆盖之前在当前浏览器里的投票。</p>
-          <p class="small-note">计分规则为第 1 名 3 分、第 2 名 2 分、第 3 名 1 分。</p>
+          <a class="toc-level-2" href="#vote-guide">投票说明</a>
+          <a class="toc-level-2" href="#vote-form-card">投票表单</a>
+          <a class="toc-level-2" href="#vote-results">即时结果</a>
         </div>
       </section>
     
@@ -42,9 +28,10 @@
     <main class="main-stage">
       
     <div class="vote-layout">
-      <section class="vote-panel">
-        <div class="info-panel">
+      <section class="vote-panel" id="vote-form-card">
+        <div class="info-panel" id="vote-guide">
           <p><strong>当前限制：</strong>这是静态站版本，投票数据保存在当前浏览器中，适合同一设备上做家庭讨论或现场汇总，不会自动同步到其他人的设备。</p>
+          <p class="small-note">每人输入名字后，需要给 Day 2 到 Day 7 每天都排出前 3 名；同一名字再次提交时，会覆盖之前在当前浏览器里的投票。</p>
         </div>
 
         <form id="vote-form" class="vote-form">
@@ -61,7 +48,7 @@
         </form>
       </section>
 
-      <aside class="results-panel">
+      <aside class="results-panel" id="vote-results">
         <div class="sidebar-card">
           <h2>即时结果</h2>
           <p class="small-note">计分规则：第 1 名 = 3 分，第 2 名 = 2 分，第 3 名 = 1 分。</p>
