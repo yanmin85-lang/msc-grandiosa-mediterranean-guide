@@ -18,6 +18,22 @@
           <a class="home-btn ghost-btn" href="search.html">站内搜索</a>
         </div>
       </section>
+      <section class="sidebar-card site-nav-card">
+        <h2>站点导航</h2>
+        <div class="site-nav-list">
+          <a class="nav-pill" href="index.html">首页</a>
+<a class="nav-pill" href="search.html">搜索</a>
+<a class="nav-pill is-active" href="vote.html">投票</a>
+<a class="nav-pill" href="report.html">摘要</a>
+<a class="nav-pill" href="detailed.html">总手册</a>
+<a class="nav-pill" href="day2.html">Day 2</a>
+<a class="nav-pill" href="day3.html">Day 3</a>
+<a class="nav-pill" href="day4.html">Day 4</a>
+<a class="nav-pill" href="day5.html">Day 5</a>
+<a class="nav-pill" href="day6.html">Day 6</a>
+<a class="nav-pill" href="day7.html">Day 7</a>
+        </div>
+      </section>
       
       <section class="sidebar-card">
         <h2>页内导航</h2>
@@ -62,6 +78,32 @@
     </div>
     
     </main>
+    
+      <details class="mobile-toc-drawer">
+        <summary>目录</summary>
+        <div class="mobile-toc-sheet">
+          <div class="mobile-toc-head">
+            <p class="eyebrow">Vote</p>
+            <h2>按天投票</h2>
+            <p class="small-note">快速跳到投票说明、表单和即时结果。</p>
+          </div>
+          <section class="mobile-toc-section">
+            <h3>当前页面</h3>
+            <div class="toc">
+              <a class="toc-level-2" href="#vote-guide">投票说明</a>
+              <a class="toc-level-2" href="#vote-form-card">投票表单</a>
+              <a class="toc-level-2" href="#vote-results">即时结果</a>
+            </div>
+          </section>
+          <section class="mobile-toc-section">
+            <h3>站点页面</h3>
+            <div class="site-nav-list">
+              {nav_html("vote")}
+            </div>
+          </section>
+        </div>
+      </details>
+    
   </div>
   
   <script>

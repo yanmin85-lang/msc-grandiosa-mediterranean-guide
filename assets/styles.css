@@ -126,11 +126,43 @@ h1, h2, h3, h4 { font-family: "Georgia", "Songti SC", serif; line-height: 1.15; 
 h1 { margin: 0; font-size: clamp(34px, 4vw, 58px); }
 .subtitle { margin: 12px 0 0; color: var(--muted); max-width: 760px; }
 .site-nav-card h2, .sidebar-card h2 { margin-top: 0; }
+.site-nav-list {
+  display: grid;
+  gap: 10px;
+}
+.nav-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 46px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(15,92,125,.14);
+  background: rgba(255,255,255,.78);
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: 0 10px 24px rgba(19,38,58,.05);
+  transition: transform .18s ease, background .18s ease, border-color .18s ease;
+}
+.nav-pill:hover {
+  text-decoration: none;
+  transform: translateY(-1px);
+  border-color: rgba(15,92,125,.28);
+  background: rgba(255,255,255,.92);
+}
+.nav-pill.is-active {
+  background: linear-gradient(135deg, rgba(15,92,125,.96), rgba(109,167,200,.92));
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 14px 30px rgba(15,92,125,.22);
+}
 .toc { display: flex; flex-direction: column; gap: 10px; }
 .toc a { color: var(--muted); font-size: 14px; }
 .toc-level-2 { font-weight: 700; color: var(--ink) !important; }
 .toc-level-3 { padding-left: 10px; }
 .toc-level-4 { padding-left: 20px; }
+.mobile-toc-drawer { display: none; }
 .content { overflow: visible; }
 .content [id] { scroll-margin-top: 24px; }
 .hero-image { margin: 10px 0 20px; border-radius: 22px; overflow: hidden; }
@@ -279,6 +311,68 @@ input, select {
   .nav-rail, .main-stage {
     overflow: visible;
     padding-right: 0;
+  }
+  .site-nav-card { display: none; }
+  .mobile-toc-drawer {
+    display: block;
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    z-index: 30;
+  }
+  .mobile-toc-drawer > summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 54px;
+    padding: 14px 18px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(15,92,125,.96), rgba(109,167,200,.94));
+    color: white;
+    font-weight: 700;
+    letter-spacing: .04em;
+    box-shadow: 0 18px 40px rgba(15,92,125,.3);
+    cursor: pointer;
+  }
+  .mobile-toc-drawer > summary::-webkit-details-marker { display: none; }
+  .mobile-toc-sheet {
+    margin-top: 12px;
+    max-height: min(72vh, 620px);
+    overflow: auto;
+    padding: 18px;
+    border-radius: 26px;
+    border: 1px solid rgba(217,203,183,.9);
+    background:
+      linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,249,242,.98)),
+      linear-gradient(135deg, rgba(15,92,125,.05), rgba(201,107,67,.05));
+    box-shadow: 0 24px 60px rgba(19,38,58,.18);
+  }
+  .mobile-toc-head h2,
+  .mobile-toc-section h3 {
+    margin-top: 0;
+  }
+  .mobile-toc-head h2 {
+    font-size: 26px;
+    margin-bottom: 8px;
+  }
+  .mobile-toc-section + .mobile-toc-section {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(217,203,183,.7);
+  }
+  .mobile-toc-section .toc {
+    gap: 8px;
+  }
+  .mobile-toc-section .toc a {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgba(19,38,58,.04);
+  }
+  .main-stage {
+    padding-bottom: 92px;
   }
 }
 @media (max-width: 720px) {
