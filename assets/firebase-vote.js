@@ -122,7 +122,7 @@ function getVoteDocId(name) {
 
 function validateRanks(values) {
   const filtered = values.filter(Boolean);
-  return filtered.length === 3 && new Set(filtered).size === 3;
+  return filtered.length === RANK_POINTS.length && new Set(filtered).size === RANK_POINTS.length;
 }
 
 function serializeVoteDoc(snapshot) {
