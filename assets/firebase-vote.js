@@ -13,7 +13,7 @@ import {
 const voteData = window.__MSC_VOTE_DATA__ || {};
 const firebaseConfig = window.__MSC_FIREBASE_CONFIG__ || {};
 const DAY_KEYS = Object.keys(voteData);
-const RANK_POINTS = [3, 2, 1];
+const RANK_POINTS = [2, 1];
 const SESSION_STORAGE_KEY = "msc-grandiosa-browser-session-v1";
 
 const voteMeta = Object.fromEntries(
@@ -45,7 +45,7 @@ function normalizeDays(days) {
     const rawRanks = days && Array.isArray(days[dayKey]) ? days[dayKey] : [];
     normalized[dayKey] = rawRanks
       .filter(code => typeof code === "string" && code)
-      .slice(0, 3);
+      .slice(0, 2);
   });
   return normalized;
 }
@@ -186,7 +186,7 @@ function buildForm() {
     fragments.push(`
       <section class="day-vote-card">
         <h3>${meta.dayLabel}</h3>
-        <p class="small-note">请按最想去的顺序选出 3 个不同项目。</p>
+        <p class="small-note">请按最想去的顺序选出 2 个不同项目。</p>
         <div class="rank-grid">
           <label class="field">
             <span>第 1 名</span>
@@ -198,13 +198,6 @@ function buildForm() {
           <label class="field">
             <span>第 2 名</span>
             <select name="${dayKey}-2" required>
-              <option value="">请选择</option>
-              ${optionHtml}
-            </select>
-          </label>
-          <label class="field">
-            <span>第 3 名</span>
-            <select name="${dayKey}-3" required>
               <option value="">请选择</option>
               ${optionHtml}
             </select>
@@ -270,13 +263,12 @@ function renderResults() {
         if (!code) return;
 
         if (!scoreMap[dayKey].tallies[code]) {
-          scoreMap[dayKey].tallies[code] = { points: 0, first: 0, second: 0, third: 0 };
+          scoreMap[dayKey].tallies[code] = { points: 0, first: 0, second: 0 };
         }
 
         scoreMap[dayKey].tallies[code].points += points;
         if (index === 0) scoreMap[dayKey].tallies[code].first += 1;
         if (index === 1) scoreMap[dayKey].tallies[code].second += 1;
-        if (index === 2) scoreMap[dayKey].tallies[code].third += 1;
       });
     });
   });
@@ -291,7 +283,6 @@ function renderResults() {
           <td>${stats.points}</td>
           <td>${stats.first}</td>
           <td>${stats.second}</td>
-          <td>${stats.third}</td>
         </tr>
       `)
       .join("");
@@ -302,10 +293,10 @@ function renderResults() {
         <div class="table-wrap">
           <table>
             <thead>
-              <tr><th>代码</th><th>项目</th><th>总分</th><th>第 1 名票数</th><th>第 2 名票数</th><th>第 3 名票数</th></tr>
+              <tr><th>代码</th><th>项目</th><th>总分</th><th>第 1 名票数</th><th>第 2 名票数</th></tr>
             </thead>
             <tbody>
-              ${rankedRows || '<tr><td colspan="6">这一日还没有投票。</td></tr>'}
+              ${rankedRows || '<tr><td colspan="5">这一日还没有投票。</td></tr>'}
             </tbody>
           </table>
         </div>
@@ -429,14 +420,12 @@ function exportVoteHistoryCsv() {
     "rank_1_code",
     "rank_1_title",
     "rank_2_code",
-    "rank_2_title",
-    "rank_3_code",
-    "rank_3_title"
+    "rank_2_title"
   ]];
 
   getAnnotatedHistory().forEach(entry => {
     if (entry.type === "reset") {
-      rows.push(["reset", entry.name, "", entry.submittedAt, "", "", "", "", "", "", "", ""]);
+      rows.push(["reset", entry.name, "", entry.submittedAt, "", "", "", "", "", ""]);
       return;
     }
 
@@ -452,9 +441,7 @@ function exportVoteHistoryCsv() {
         ranks[0] || "",
         ranks[0] ? voteMeta[dayKey].titles[ranks[0]] || "" : "",
         ranks[1] || "",
-        ranks[1] ? voteMeta[dayKey].titles[ranks[1]] || "" : "",
-        ranks[2] || "",
-        ranks[2] ? voteMeta[dayKey].titles[ranks[2]] || "" : ""
+        ranks[1] ? voteMeta[dayKey].titles[ranks[1]] || "" : ""
       ]);
     });
   });
@@ -556,9 +543,9 @@ function getCurrentFormVote(form) {
 
   const days = {};
   DAY_KEYS.forEach(dayKey => {
-    const ranks = [1, 2, 3].map(rank => form.elements[`${dayKey}-${rank}`].value);
+    const ranks = [1, 2].map(rank => form.elements[`${dayKey}-${rank}`].value);
     if (!validateRanks(ranks)) {
-      throw new Error(`${voteData[dayKey][0].dayLabel} 需要选择 3 个不同项目。`);
+      throw new Error(`${voteData[dayKey][0].dayLabel} 需要选择 2 个不同项目。`);
     }
     days[dayKey] = ranks;
   });

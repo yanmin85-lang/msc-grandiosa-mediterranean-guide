@@ -11,13 +11,10 @@ service cloud.firestore {
 
     function validRankList(listValue) {
       return listValue is list
-        && listValue.size() == 3
+        && listValue.size() == 2
         && listValue[0] is string && listValue[0].size() > 0
         && listValue[1] is string && listValue[1].size() > 0
-        && listValue[2] is string && listValue[2].size() > 0
-        && listValue[0] != listValue[1]
-        && listValue[0] != listValue[2]
-        && listValue[1] != listValue[2];
+        && listValue[0] != listValue[1];
     }
 
     function validDaysMap(days) {
