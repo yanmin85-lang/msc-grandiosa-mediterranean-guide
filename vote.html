@@ -12,7 +12,7 @@
       <section class="topbar">
         <p class="eyebrow">Mediterranean Cruise Notes</p>
         <h1>按天投票</h1>
-        <p class="subtitle">每个人输入名字后，可以给 Day 2 到 Day 7 的项目按最想去的顺序选出前 3 名；提交后会记录提交时间，并立即刷新当前浏览器内的统计结果。</p>
+        <p class="subtitle">每个人输入名字后，可以给 Day 2 到 Day 7 的项目按最想去的顺序选出前 3 名；提交后会同步到共享投票库，所有人都能看到最新结果和记录。</p>
         <div class="sidebar-actions">
           <a class="home-btn" href="index.html">回到首页</a>
           <a class="home-btn ghost-btn" href="search.html">站内搜索</a>
@@ -50,14 +50,15 @@
       <header class="mobile-page-header">
         <p class="eyebrow">Mediterranean Cruise Notes</p>
         <h1>按天投票</h1>
-        <p class="subtitle">每个人输入名字后，可以给 Day 2 到 Day 7 的项目按最想去的顺序选出前 3 名；提交后会记录提交时间，并立即刷新当前浏览器内的统计结果。</p>
+        <p class="subtitle">每个人输入名字后，可以给 Day 2 到 Day 7 的项目按最想去的顺序选出前 3 名；提交后会同步到共享投票库，所有人都能看到最新结果和记录。</p>
       </header>
       
     <div class="vote-layout">
       <section class="vote-panel" id="vote-form-card">
         <div class="info-panel" id="vote-guide">
-          <p><strong>当前限制：</strong>这是静态站版本，投票结果和投票记录都保存在当前浏览器中，适合同一设备上做家庭讨论或现场汇总，不会自动同步到其他人的设备。</p>
-          <p class="small-note">每人输入名字后，需要给 Day 2 到 Day 7 每天都排出前 3 名；同一名字再次提交时，会覆盖当前统计中的旧投票，但历史记录会保留这次提交时间，方便后续导出。</p>
+          <p><strong>共享模式：</strong>投票结果和投票记录现在会写入 Firebase 共享数据库。所有打开这个页面的人，都会看到同一份结果。</p>
+          <p class="small-note">每人输入名字后，需要给 Day 2 到 Day 7 每天都排出前 3 名；这里是公开共享白板，不区分账号，同一名字再次提交时会覆盖该名字当前的共享投票，同时保留一条历史记录。</p>
+          <div id="sync-status" class="vote-sync-status" aria-live="polite">正在连接共享投票服务…</div>
         </div>
 
         <form id="vote-form" class="vote-form">
@@ -68,8 +69,8 @@
           <div id="day-groups"></div>
           <div class="vote-actions">
             <button type="submit" class="primary-btn">提交投票</button>
-            <button type="button" class="secondary-btn" id="reset-my-vote">清空这个名字的投票</button>
-            <button type="button" class="secondary-btn" id="clear-all-votes">清空当前浏览器全部投票与记录</button>
+            <button type="button" class="secondary-btn" id="reset-my-vote">清空这个名字的共享投票</button>
+            <button type="button" class="secondary-btn" id="refresh-shared-votes">刷新共享数据</button>
           </div>
         </form>
       </section>
@@ -77,12 +78,12 @@
       <aside class="results-panel" id="vote-results">
         <div class="sidebar-card">
           <h2>即时结果</h2>
-          <p class="small-note">计分规则：第 1 名 = 3 分，第 2 名 = 2 分，第 3 名 = 1 分。</p>
+          <p class="small-note">计分规则：第 1 名 = 3 分，第 2 名 = 2 分，第 3 名 = 1 分。这里显示的是共享数据库中的最新结果。</p>
           <div id="results"></div>
         </div>
         <div class="sidebar-card" id="vote-records">
           <h2>投票记录</h2>
-          <p class="small-note">这里会保留当前浏览器里的投票提交和清除记录，并支持导出为 JSON 或 CSV。</p>
+          <p class="small-note">这里会保留共享数据库里的投票提交和清除记录，并支持导出为 JSON 或 CSV。</p>
           <div class="vote-log-actions">
             <button type="button" class="secondary-btn" id="export-vote-history-json">导出 JSON</button>
             <button type="button" class="secondary-btn" id="export-vote-history-csv">导出 CSV</button>
@@ -133,477 +134,18 @@
   </div>
   
   <script>
-    const voteData = {"day2": [{"dayLabel": "Day 2 | 戛纳 Cannes / Côte d'Azur"}, {"code": "CEQ15", "title": "戛纳老城步行与自由活动"}, {"code": "CEQBK2", "title": "戛纳至昂蒂布海岸电助力骑行"}, {"code": "CEQ01", "title": "尼斯城市观光"}, {"code": "CEQ02", "title": "戛纳与圣拉斐尔法式海岸线"}, {"code": "CEQ04", "title": "摩纳哥经典游"}, {"code": "CEQ09", "title": "戛纳与昂蒂布双城游"}], "day3": [{"dayLabel": "Day 3 | 热那亚 Genua / Portofino"}, {"code": "GOA06T", "title": "热那亚敞篷巴士加水族馆"}, {"code": "GOA14T", "title": "热那亚 Segway 城市探险"}, {"code": "GOA18T", "title": "热那亚城市景观巴士游"}, {"code": "GOA23T", "title": "米兰一日观光"}, {"code": "GOA29T", "title": "波托菲诺与利古里亚海岸"}, {"code": "GOA39T", "title": "热那亚世界级水族馆"}, {"code": "GOA44T", "title": "热那亚历史中心徒步"}, {"code": "GOA46T", "title": "利古里亚海岸村庄加美食加波托菲诺"}, {"code": "GOA51T", "title": "跟着 Nino 探索航海共和国热那亚"}, {"code": "GOABK2", "title": "热那亚电助力骑行"}, {"code": "GOAEA", "title": "热那亚无障碍观光"}, {"code": "FMGOA393", "title": "热那亚水族馆家庭套票 2大1小"}, {"code": "FMGOA394", "title": "热那亚水族馆家庭套票 2大2小"}, {"code": "GOA19T", "title": "热那亚水族馆幕后体验"}], "day4": [{"dayLabel": "Day 4 | 拉斯佩齐亚 La Spezia / Cinque Terre"}, {"code": "SPE21", "title": "卢卡古城与酒庄品酒"}, {"code": "SPE43", "title": "五渔村三村游加午餐"}, {"code": "SPEBK2", "title": "拉斯佩齐亚至莱里奇电助力骑行"}, {"code": "SPEEA", "title": "佛罗伦萨无障碍观光"}, {"code": "SPEEAA", "title": "比萨加卢卡无障碍观光"}, {"code": "SPE05", "title": "比萨斜塔与奇迹广场"}, {"code": "SPE08", "title": "佛罗伦萨一日游"}, {"code": "SPE11", "title": "五渔村自由探索"}, {"code": "SPE61", "title": "五渔村第六村波托韦内雷"}, {"code": "SPE62", "title": "佛罗伦萨加比萨经典日"}], "day5": [{"dayLabel": "Day 5 | 奇维塔韦基亚 Civitavecchia / 罗马"}, {"code": "CIV07", "title": "罗马地标全览含斗兽场"}, {"code": "CIV08", "title": "梵蒂冈博物馆加罗马亮点"}, {"code": "CIV73", "title": "永恒之城罗马精华"}, {"code": "CIV74", "title": "奥斯蒂亚古城与鲁斯波利城堡"}, {"code": "CIV76", "title": "罗马标志性景点一日游"}, {"code": "CIVBK1", "title": "罗马自行车一日游"}, {"code": "CIVBK2", "title": "罗马电助力自行车一日游"}, {"code": "CIVOP", "title": "罗马随上随下观光巴士"}, {"code": "CIV02", "title": "罗马建筑与巴洛克中心"}, {"code": "CIV03", "title": "罗马自由行接送"}, {"code": "CIV09", "title": "罗马巴士亮点与圣彼得广场"}, {"code": "CIV22", "title": "塔尔奎尼亚与图斯卡尼亚双城"}], "day6": [{"dayLabel": "Day 6 | 海上日 At Sea"}, {"code": "BTS01", "title": "终极幕后参观：全区域"}, {"code": "BTS02", "title": "幕后参观：后台与后勤区"}, {"code": "BTS03", "title": "幕后参观：控制室与机舱区"}], "day7": [{"dayLabel": "Day 7 | 帕尔马 Palma de Mallorca"}, {"code": "PMI02", "title": "龙洞地下湖加珍珠工厂"}, {"code": "PMI28", "title": "索列尔古董火车山景线"}, {"code": "PMI44", "title": "帕尔马老城与马略卡美食"}, {"code": "PMI99", "title": "帕尔马步行 Protectours"}, {"code": "PMIBK2", "title": "帕尔马电助力骑行"}, {"code": "PMIEA", "title": "帕尔马无障碍观光"}, {"code": "PMI01", "title": "帕尔马城堡与大教堂"}, {"code": "PMI19", "title": "帕尔马亮点加 Son Amar 弗拉门戈秀"}]};
-    const STORAGE_KEY = "msc-grandiosa-votes-v1";
-    const HISTORY_STORAGE_KEY = "msc-grandiosa-vote-history-v1";
-    const RANK_POINTS = [3, 2, 1];
-    const voteMeta = Object.fromEntries(Object.entries(voteData).map(([dayKey, rows]) => [
-      dayKey,
-      {
-        label: rows[0].dayLabel,
-        titles: Object.fromEntries(rows.slice(1).map(item => [item.code, item.title]))
-      }
-    ]));
-
-    function parseStoredArray(key) {
-      try {
-        const parsed = JSON.parse(localStorage.getItem(key) || "[]");
-        return Array.isArray(parsed) ? parsed : [];
-      } catch {
-        return [];
-      }
-    }
-
-    function collapseWhitespace(value) {
-      return typeof value === "string" ? value.replace(/\s+/g, " ").trim() : "";
-    }
-
-    function normalizeDays(days) {
-      const normalized = {};
-      Object.keys(voteData).forEach(dayKey => {
-        const rawRanks = days && Array.isArray(days[dayKey]) ? days[dayKey] : [];
-        normalized[dayKey] = rawRanks
-          .filter(code => typeof code === "string" && code)
-          .slice(0, 3);
-      });
-      return normalized;
-    }
-
-    function getStoredVotes() {
-      return parseStoredArray(STORAGE_KEY)
-        .map(vote => ({
-          name: collapseWhitespace(vote && vote.name),
-          days: normalizeDays(vote && vote.days),
-          submittedAt: vote && typeof vote.submittedAt === "string" ? vote.submittedAt : new Date().toISOString(),
-          revision: vote && Number.isFinite(vote.revision) ? vote.revision : 1
-        }))
-        .filter(vote => vote.name);
-    }
-
-    function setStoredVotes(votes) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(votes));
-    }
-
-    function getVoteHistory() {
-      return parseStoredArray(HISTORY_STORAGE_KEY)
-        .map(entry => ({
-          type: entry && entry.type === "reset" ? "reset" : "submit",
-          name: collapseWhitespace(entry && entry.name),
-          days: normalizeDays(entry && entry.days),
-          submittedAt: entry && typeof entry.submittedAt === "string" ? entry.submittedAt : new Date().toISOString(),
-          revision: entry && Number.isFinite(entry.revision) ? entry.revision : 1,
-          source: entry && typeof entry.source === "string" ? entry.source : "browser"
-        }))
-        .filter(entry => entry.name);
-    }
-
-    function setVoteHistory(history) {
-      localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
-    }
-
-    function formatDateTime(isoString) {
-      const date = new Date(isoString);
-      if (Number.isNaN(date.getTime())) return isoString;
-      return new Intl.DateTimeFormat("zh-CN", {
-        dateStyle: "medium",
-        timeStyle: "short"
-      }).format(date);
-    }
-
-    function getDownloadStamp() {
-      return new Date().toISOString().replace(/[:.]/g, "-");
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-    }
-
-    function escapeCsv(value) {
-      const text = value == null ? "" : String(value);
-      return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
-    }
-
-    function downloadText(filename, mimeType, content) {
-      const blob = new Blob([content], { type: mimeType });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    }
-
-    function buildForm() {
-      const container = document.getElementById("day-groups");
-      const fragments = [];
-      Object.entries(voteData).forEach(([dayKey, rows]) => {
-        const meta = rows[0];
-        const options = rows.slice(1);
-        const optionHtml = options.map(item => `<option value="${item.code}">${item.code} | ${item.title}</option>`).join("");
-        fragments.push(`
-          <section class="day-vote-card">
-            <h3>${meta.dayLabel}</h3>
-            <p class="small-note">请按最想去的顺序选出 3 个不同项目。</p>
-            <div class="rank-grid">
-              <label class="field">
-                <span>第 1 名</span>
-                <select name="${dayKey}-1" required>
-                  <option value="">请选择</option>
-                  ${optionHtml}
-                </select>
-              </label>
-              <label class="field">
-                <span>第 2 名</span>
-                <select name="${dayKey}-2" required>
-                  <option value="">请选择</option>
-                  ${optionHtml}
-                </select>
-              </label>
-              <label class="field">
-                <span>第 3 名</span>
-                <select name="${dayKey}-3" required>
-                  <option value="">请选择</option>
-                  ${optionHtml}
-                </select>
-              </label>
-            </div>
-          </section>
-        `);
-      });
-      container.innerHTML = fragments.join("");
-    }
-
-    function renderResults() {
-      const votes = getStoredVotes();
-      const resultsNode = document.getElementById("results");
-      if (!votes.length) {
-        resultsNode.innerHTML = '<p class="small-note">当前浏览器还没有有效投票。</p>';
-        return;
-      }
-
-      const scoreMap = {};
-      Object.keys(voteData).forEach(dayKey => {
-        scoreMap[dayKey] = {
-          label: voteMeta[dayKey].label,
-          titles: voteMeta[dayKey].titles,
-          tallies: {}
-        };
-      });
-
-      votes.forEach(vote => {
-        Object.entries(vote.days).forEach(([dayKey, ranks]) => {
-          if (!scoreMap[dayKey]) return;
-          RANK_POINTS.forEach((points, idx) => {
-            const code = ranks[idx];
-            if (!code) return;
-            if (!scoreMap[dayKey].tallies[code]) {
-              scoreMap[dayKey].tallies[code] = { points: 0, first: 0, second: 0, third: 0 };
-            }
-            scoreMap[dayKey].tallies[code].points += points;
-            if (idx === 0) scoreMap[dayKey].tallies[code].first += 1;
-            if (idx === 1) scoreMap[dayKey].tallies[code].second += 1;
-            if (idx === 2) scoreMap[dayKey].tallies[code].third += 1;
-          });
-        });
-      });
-
-      const dayHtml = Object.entries(scoreMap).map(([dayKey, entry]) => {
-        const ranked = Object.entries(entry.tallies)
-          .sort((a, b) => b[1].points - a[1].points || b[1].first - a[1].first || a[0].localeCompare(b[0]))
-          .map(([code, stats]) => `
-            <tr>
-              <td>${code}</td>
-              <td>${entry.titles[code] || code}</td>
-              <td>${stats.points}</td>
-              <td>${stats.first}</td>
-              <td>${stats.second}</td>
-              <td>${stats.third}</td>
-            </tr>
-          `).join("");
-        return `
-          <section class="result-day-card">
-            <h3>${entry.label}</h3>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr><th>代码</th><th>项目</th><th>总分</th><th>第 1 名票数</th><th>第 2 名票数</th><th>第 3 名票数</th></tr>
-                </thead>
-                <tbody>
-                  ${ranked || '<tr><td colspan="6">这一日还没有投票。</td></tr>'}
-                </tbody>
-              </table>
-            </div>
-          </section>
-        `;
-      }).join("");
-
-      const voters = votes
-        .map(vote => vote.name)
-        .sort((a, b) => a.localeCompare(b, "zh-CN"));
-      resultsNode.innerHTML = `
-        <div class="vote-summary">
-          <p><strong>当前投票人数：</strong>${votes.length}</p>
-          <p><strong>已投票名单：</strong>${voters.join("、")}</p>
-        </div>
-        ${dayHtml}
-      `;
-    }
-
-    function renderVoteHistory() {
-      const history = getVoteHistory()
-        .slice()
-        .sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
-      const historyNode = document.getElementById("vote-history");
-      const jsonButton = document.getElementById("export-vote-history-json");
-      const csvButton = document.getElementById("export-vote-history-csv");
-      const hasHistory = history.length > 0;
-
-      jsonButton.disabled = !hasHistory;
-      csvButton.disabled = !hasHistory;
-
-      if (!hasHistory) {
-        historyNode.innerHTML = '<p class="small-note">当前浏览器还没有投票记录。</p>';
-        return;
-      }
-
-      const submitCount = history.filter(entry => entry.type === "submit").length;
-      const resetCount = history.filter(entry => entry.type === "reset").length;
-      const latestEntry = history[0];
-
-      const listHtml = history.map(entry => {
-        if (entry.type === "reset") {
-          return `
-            <div class="vote-log-card vote-log-card-static">
-              <div class="vote-log-summary">
-                <span class="vote-log-summary-name">${escapeHtml(entry.name)}</span>
-                <span class="vote-log-summary-meta">清除了当前投票 · ${escapeHtml(formatDateTime(entry.submittedAt))}</span>
-              </div>
-            </div>
-          `;
-        }
-
-        const dayHtml = Object.keys(voteData).map(dayKey => {
-          const ranks = entry.days[dayKey] || [];
-          const rankHtml = ranks.map((code, index) => `
-            <li>${index + 1}. ${escapeHtml(code)} | ${escapeHtml(voteMeta[dayKey].titles[code] || code)}</li>
-          `).join("");
-          return `
-            <div class="vote-log-day">
-              <p><strong>${escapeHtml(voteMeta[dayKey].label)}</strong></p>
-              <ol class="vote-log-ranks">
-                ${rankHtml}
-              </ol>
-            </div>
-          `;
-        }).join("");
-
-        return `
-          <details class="vote-log-card">
-            <summary>
-              <span class="vote-log-summary-name">${escapeHtml(entry.name)}</span>
-              <span class="vote-log-summary-meta">第 ${entry.revision} 次提交 · ${escapeHtml(formatDateTime(entry.submittedAt))}</span>
-            </summary>
-            <div class="vote-log-body">
-              ${dayHtml}
-            </div>
-          </details>
-        `;
-      }).join("");
-
-      historyNode.innerHTML = `
-        <div class="vote-summary">
-          <p><strong>累计记录条数：</strong>${history.length}</p>
-          <p><strong>提交记录：</strong>${submitCount} 条；<strong>清除记录：</strong>${resetCount} 条</p>
-          <p><strong>最近一条：</strong>${escapeHtml(latestEntry.name)} · ${latestEntry.type === "reset" ? "清除当前投票" : `第 ${latestEntry.revision} 次提交`} · ${escapeHtml(formatDateTime(latestEntry.submittedAt))}</p>
-        </div>
-        <div class="vote-log-list">
-          ${listHtml}
-        </div>
-      `;
-    }
-
-    function exportVoteHistoryJson() {
-      const payload = {
-        exportedAt: new Date().toISOString(),
-        activeVotes: getStoredVotes(),
-        voteHistory: getVoteHistory()
-      };
-      downloadText(
-        `msc-grandiosa-vote-history-${getDownloadStamp()}.json`,
-        "application/json;charset=utf-8",
-        JSON.stringify(payload, null, 2)
-      );
-    }
-
-    function exportVoteHistoryCsv() {
-      const rows = [[
-        "action",
-        "name",
-        "revision",
-        "submitted_at",
-        "day_key",
-        "day_label",
-        "rank_1_code",
-        "rank_1_title",
-        "rank_2_code",
-        "rank_2_title",
-        "rank_3_code",
-        "rank_3_title"
-      ]];
-
-      getVoteHistory().forEach(entry => {
-        if (entry.type === "reset") {
-          rows.push(["reset", entry.name, "", entry.submittedAt, "", "", "", "", "", "", "", ""]);
-          return;
-        }
-
-        Object.keys(voteData).forEach(dayKey => {
-          const ranks = entry.days[dayKey] || [];
-          rows.push([
-            "submit",
-            entry.name,
-            String(entry.revision),
-            entry.submittedAt,
-            dayKey,
-            voteMeta[dayKey].label,
-            ranks[0] || "",
-            ranks[0] ? voteMeta[dayKey].titles[ranks[0]] || "" : "",
-            ranks[1] || "",
-            ranks[1] ? voteMeta[dayKey].titles[ranks[1]] || "" : "",
-            ranks[2] || "",
-            ranks[2] ? voteMeta[dayKey].titles[ranks[2]] || "" : ""
-          ]);
-        });
-      });
-
-      const csv = rows.map(row => row.map(escapeCsv).join(",")).join("\n");
-      downloadText(
-        `msc-grandiosa-vote-history-${getDownloadStamp()}.csv`,
-        "text/csv;charset=utf-8",
-        csv
-      );
-    }
-
-    function getNextRevision(name, history) {
-      return history.filter(entry => entry.type === "submit" && entry.name === name).length + 1;
-    }
-
-    function validateRanks(values) {
-      const filtered = values.filter(Boolean);
-      return filtered.length === 3 && new Set(filtered).size === 3;
-    }
-
-    function migrateLegacyVotesToHistory() {
-      const history = getVoteHistory();
-      if (history.length) return;
-
-      const votes = getStoredVotes();
-      if (!votes.length) return;
-
-      const migratedHistory = votes.map(vote => ({
-        type: "submit",
-        name: vote.name,
-        days: vote.days,
-        submittedAt: vote.submittedAt,
-        revision: vote.revision || 1,
-        source: "legacy-local-storage"
-      }));
-      setVoteHistory(migratedHistory);
-    }
-
-    function renderAll() {
-      renderResults();
-      renderVoteHistory();
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      buildForm();
-      migrateLegacyVotesToHistory();
-      renderAll();
-
-      const form = document.getElementById("vote-form");
-      form.addEventListener("submit", event => {
-        event.preventDefault();
-        const name = collapseWhitespace(document.getElementById("voter-name").value);
-        if (!name) {
-          alert("请先输入名字。");
-          return;
-        }
-
-        const days = {};
-        for (const dayKey of Object.keys(voteData)) {
-          const ranks = [1, 2, 3].map(rank => form.elements[`${dayKey}-${rank}`].value);
-          if (!validateRanks(ranks)) {
-            alert(`${voteData[dayKey][0].dayLabel} 需要选择 3 个不同项目。`);
-            return;
-          }
-          days[dayKey] = ranks;
-        }
-
-        const submittedAt = new Date().toISOString();
-        const history = getVoteHistory();
-        const revision = getNextRevision(name, history);
-        const votes = getStoredVotes().filter(vote => vote.name !== name);
-        votes.push({ name, days, submittedAt, revision });
-        setStoredVotes(votes);
-        history.push({ type: "submit", name, days, submittedAt, revision, source: "browser" });
-        setVoteHistory(history);
-        renderAll();
-        alert("投票已保存到当前浏览器，并已写入投票记录。");
-      });
-
-      document.getElementById("reset-my-vote").addEventListener("click", () => {
-        const name = collapseWhitespace(document.getElementById("voter-name").value);
-        if (!name) {
-          alert("请先输入要清除的名字。");
-          return;
-        }
-
-        const currentVotes = getStoredVotes();
-        const remainingVotes = currentVotes.filter(vote => vote.name !== name);
-        if (remainingVotes.length === currentVotes.length) {
-          alert("当前浏览器里没有这个名字的有效投票。");
-          return;
-        }
-
-        setStoredVotes(remainingVotes);
-        const history = getVoteHistory();
-        history.push({
-          type: "reset",
-          name,
-          days: {},
-          submittedAt: new Date().toISOString(),
-          revision: getNextRevision(name, history) - 1,
-          source: "browser"
-        });
-        setVoteHistory(history);
-        renderAll();
-        alert("这个名字的当前投票已清除，并已写入记录。");
-      });
-
-      document.getElementById("clear-all-votes").addEventListener("click", () => {
-        if (!confirm("这会清空当前浏览器保存的全部投票结果和全部投票记录，是否继续？")) return;
-        localStorage.removeItem(STORAGE_KEY);
-        localStorage.removeItem(HISTORY_STORAGE_KEY);
-        renderAll();
-      });
-
-      document.getElementById("export-vote-history-json").addEventListener("click", exportVoteHistoryJson);
-      document.getElementById("export-vote-history-csv").addEventListener("click", exportVoteHistoryCsv);
-
-      window.addEventListener("storage", event => {
-        if (event.key && event.key !== STORAGE_KEY && event.key !== HISTORY_STORAGE_KEY) return;
-        renderAll();
-      });
-    });
+    window.__MSC_VOTE_DATA__ = {"day2": [{"dayLabel": "Day 2 | 戛纳 Cannes / Côte d'Azur"}, {"code": "CEQ15", "title": "戛纳老城步行与自由活动"}, {"code": "CEQBK2", "title": "戛纳至昂蒂布海岸电助力骑行"}, {"code": "CEQ01", "title": "尼斯城市观光"}, {"code": "CEQ02", "title": "戛纳与圣拉斐尔法式海岸线"}, {"code": "CEQ04", "title": "摩纳哥经典游"}, {"code": "CEQ09", "title": "戛纳与昂蒂布双城游"}], "day3": [{"dayLabel": "Day 3 | 热那亚 Genua / Portofino"}, {"code": "GOA06T", "title": "热那亚敞篷巴士加水族馆"}, {"code": "GOA14T", "title": "热那亚 Segway 城市探险"}, {"code": "GOA18T", "title": "热那亚城市景观巴士游"}, {"code": "GOA23T", "title": "米兰一日观光"}, {"code": "GOA29T", "title": "波托菲诺与利古里亚海岸"}, {"code": "GOA39T", "title": "热那亚世界级水族馆"}, {"code": "GOA44T", "title": "热那亚历史中心徒步"}, {"code": "GOA46T", "title": "利古里亚海岸村庄加美食加波托菲诺"}, {"code": "GOA51T", "title": "跟着 Nino 探索航海共和国热那亚"}, {"code": "GOABK2", "title": "热那亚电助力骑行"}, {"code": "GOAEA", "title": "热那亚无障碍观光"}, {"code": "FMGOA393", "title": "热那亚水族馆家庭套票 2大1小"}, {"code": "FMGOA394", "title": "热那亚水族馆家庭套票 2大2小"}, {"code": "GOA19T", "title": "热那亚水族馆幕后体验"}], "day4": [{"dayLabel": "Day 4 | 拉斯佩齐亚 La Spezia / Cinque Terre"}, {"code": "SPE21", "title": "卢卡古城与酒庄品酒"}, {"code": "SPE43", "title": "五渔村三村游加午餐"}, {"code": "SPEBK2", "title": "拉斯佩齐亚至莱里奇电助力骑行"}, {"code": "SPEEA", "title": "佛罗伦萨无障碍观光"}, {"code": "SPEEAA", "title": "比萨加卢卡无障碍观光"}, {"code": "SPE05", "title": "比萨斜塔与奇迹广场"}, {"code": "SPE08", "title": "佛罗伦萨一日游"}, {"code": "SPE11", "title": "五渔村自由探索"}, {"code": "SPE61", "title": "五渔村第六村波托韦内雷"}, {"code": "SPE62", "title": "佛罗伦萨加比萨经典日"}], "day5": [{"dayLabel": "Day 5 | 奇维塔韦基亚 Civitavecchia / 罗马"}, {"code": "CIV07", "title": "罗马地标全览含斗兽场"}, {"code": "CIV08", "title": "梵蒂冈博物馆加罗马亮点"}, {"code": "CIV73", "title": "永恒之城罗马精华"}, {"code": "CIV74", "title": "奥斯蒂亚古城与鲁斯波利城堡"}, {"code": "CIV76", "title": "罗马标志性景点一日游"}, {"code": "CIVBK1", "title": "罗马自行车一日游"}, {"code": "CIVBK2", "title": "罗马电助力自行车一日游"}, {"code": "CIVOP", "title": "罗马随上随下观光巴士"}, {"code": "CIV02", "title": "罗马建筑与巴洛克中心"}, {"code": "CIV03", "title": "罗马自由行接送"}, {"code": "CIV09", "title": "罗马巴士亮点与圣彼得广场"}, {"code": "CIV22", "title": "塔尔奎尼亚与图斯卡尼亚双城"}], "day6": [{"dayLabel": "Day 6 | 海上日 At Sea"}, {"code": "BTS01", "title": "终极幕后参观：全区域"}, {"code": "BTS02", "title": "幕后参观：后台与后勤区"}, {"code": "BTS03", "title": "幕后参观：控制室与机舱区"}], "day7": [{"dayLabel": "Day 7 | 帕尔马 Palma de Mallorca"}, {"code": "PMI02", "title": "龙洞地下湖加珍珠工厂"}, {"code": "PMI28", "title": "索列尔古董火车山景线"}, {"code": "PMI44", "title": "帕尔马老城与马略卡美食"}, {"code": "PMI99", "title": "帕尔马步行 Protectours"}, {"code": "PMIBK2", "title": "帕尔马电助力骑行"}, {"code": "PMIEA", "title": "帕尔马无障碍观光"}, {"code": "PMI01", "title": "帕尔马城堡与大教堂"}, {"code": "PMI19", "title": "帕尔马亮点加 Son Amar 弗拉门戈秀"}]};
+    window.__MSC_FIREBASE_CONFIG__ = {
+      apiKey: "AIzaSyBH2KaaX1v0Ik06k3g-Gc9ms2P5amop3Xg",
+      authDomain: "msc-grandiosa-vote-hub.firebaseapp.com",
+      projectId: "msc-grandiosa-vote-hub",
+      storageBucket: "msc-grandiosa-vote-hub.firebasestorage.app",
+      messagingSenderId: "11611515278",
+      appId: "1:11611515278:web:857caeab83374426fbdcdf",
+      measurementId: "G-GDNJPFZN5E"
+    };
   </script>
+  <script type="module" src="assets/firebase-vote.js"></script>
 
   <script src="assets/mobile-toc-anchor.js" defer></script>
   <script src="assets/mobile-tables.js" defer></script>

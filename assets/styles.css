@@ -333,6 +333,29 @@ input, select {
 .vote-log-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 16px; }
 .small-note { color: var(--muted); font-size: 14px; }
 .vote-summary { padding: 0 0 8px; }
+.vote-sync-status {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(15,92,125,.14);
+  background: rgba(255,255,255,.78);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.vote-sync-status.is-loading {
+  border-color: rgba(15,92,125,.18);
+  background: rgba(244,250,252,.92);
+}
+.vote-sync-status.is-success {
+  border-color: rgba(37,125,85,.2);
+  background: rgba(241,250,245,.96);
+}
+.vote-sync-status.is-error {
+  border-color: rgba(180,84,66,.22);
+  background: rgba(255,244,240,.96);
+  color: #7a2f1d;
+}
 .primary-btn:disabled,
 .secondary-btn:disabled {
   opacity: .45;

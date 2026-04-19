@@ -1,0 +1,78 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function validName(value) {
+      return value is string && value.size() > 0 && value.size() <= 80;
+    }
+
+    function validSession(value) {
+      return value is string && value.size() > 0 && value.size() <= 160;
+    }
+
+    function validRankList(listValue) {
+      return listValue is list
+        && listValue.size() == 3
+        && listValue[0] is string && listValue[0].size() > 0
+        && listValue[1] is string && listValue[1].size() > 0
+        && listValue[2] is string && listValue[2].size() > 0
+        && listValue[0] != listValue[1]
+        && listValue[0] != listValue[2]
+        && listValue[1] != listValue[2];
+    }
+
+    function validDaysMap(days) {
+      return days is map
+        && days.keys().hasAll(['day2', 'day3', 'day4', 'day5', 'day6', 'day7'])
+        && days.keys().hasOnly(['day2', 'day3', 'day4', 'day5', 'day6', 'day7'])
+        && validRankList(days.day2)
+        && validRankList(days.day3)
+        && validRankList(days.day4)
+        && validRankList(days.day5)
+        && validRankList(days.day6)
+        && validRankList(days.day7);
+    }
+
+    function validVoteDoc() {
+      return request.resource.data.keys().hasOnly(['name', 'nameKey', 'days', 'updatedAt', 'updatedBySession'])
+        && validName(request.resource.data.name)
+        && validName(request.resource.data.nameKey)
+        && validSession(request.resource.data.updatedBySession)
+        && validDaysMap(request.resource.data.days);
+    }
+
+    function validSubmitHistoryDoc() {
+      return request.resource.data.keys().hasOnly(['type', 'name', 'nameKey', 'days', 'submittedAt', 'actorSession'])
+        && request.resource.data.type == 'submit'
+        && validName(request.resource.data.name)
+        && validName(request.resource.data.nameKey)
+        && validSession(request.resource.data.actorSession)
+        && validDaysMap(request.resource.data.days);
+    }
+
+    function validResetHistoryDoc() {
+      return request.resource.data.keys().hasOnly(['type', 'name', 'nameKey', 'days', 'submittedAt', 'actorSession'])
+        && request.resource.data.type == 'reset'
+        && validName(request.resource.data.name)
+        && validName(request.resource.data.nameKey)
+        && validSession(request.resource.data.actorSession)
+        && request.resource.data.days is map
+        && request.resource.data.days.keys().size() == 0;
+    }
+
+    match /votes/{voteId} {
+      allow read: if true;
+      allow create, update: if validVoteDoc();
+      allow delete: if true;
+    }
+
+    match /voteHistory/{eventId} {
+      allow read: if true;
+      allow create: if validSubmitHistoryDoc() || validResetHistoryDoc();
+      allow update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
